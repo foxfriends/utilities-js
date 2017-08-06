@@ -1,0 +1,11 @@
+{
+  "name": "wait",
+  "version": "1.0.0",
+  "description": "Produces a promise that will resolve after a time",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha index.test.js"
+  },
+  "author": "Cameron Eldridge",
+  "license": "ISC"
+}

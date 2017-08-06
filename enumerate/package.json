@@ -1,0 +1,11 @@
+{
+  "name": "enumerate",
+  "version": "1.0.0",
+  "description": "Create an enumerator with the given keys",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha index.test.js"
+  },
+  "author": "Cameron Eldridge",
+  "license": "ISC"
+}

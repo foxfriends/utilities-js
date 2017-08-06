@@ -1,0 +1,11 @@
+{
+  "name": "splice-string",
+  "version": "1.0.0",
+  "description": "Like splice for arrays but on strings",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha index.test.js"
+  },
+  "author": "Cameron Eldridge",
+  "license": "ISC"
+}

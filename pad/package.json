@@ -1,0 +1,11 @@
+{
+  "name": "pad",
+  "version": "1.0.0",
+  "description": "Pads a string until it is the required length",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha index.test.js"
+  },
+  "author": "Cameron Eldridge",
+  "license": "ISC"
+}

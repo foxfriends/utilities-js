@@ -1,0 +1,11 @@
+{
+  "name": "symbolic",
+  "version": "1.0.0",
+  "description": "Generates symbols indefinitely",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha index.test.js"
+  },
+  "author": "Cameron Eldridge",
+  "license": "ISC"
+}

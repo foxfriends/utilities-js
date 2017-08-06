@@ -1,0 +1,11 @@
+{
+  "name": "generate",
+  "version": "1.0.0",
+  "description": "Automatically progresses Promise based generators as their values become available",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha index.test.js"
+  },
+  "author": "Cameron Eldridge",
+  "license": "ISC"
+}
