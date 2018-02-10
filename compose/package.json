@@ -1,0 +1,11 @@
+{
+  "name": "compose",
+  "version": "1.0.0",
+  "description": "Function composition",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha index.test.js"
+  },
+  "author": "Cameron Eldridge",
+  "license": "ISC"
+}

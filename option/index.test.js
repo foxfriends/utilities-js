@@ -943,200 +943,104 @@ module.exports = function hasProperty(name, obj) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0____ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__match__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__monad__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__monad___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__monad__);
 
 
 __webpack_require__(12).should();
 
 
-describe('match', function () {
-  var _dec, _class, _dec2, _class2, _dec3, _class3, _dec4, _class4;
-
-  let Cons = (_dec = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])(), _dec(_class = class Cons {
-    constructor(first, rest) {}
-  }) || _class);
-  let Empty = (_dec2 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])(), _dec2(_class2 = class Empty {}) || _class2);
-  let Person = (_dec3 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])(), _dec3(_class3 = class Person {
-    constructor(name, age) {
-      this.name = name;
-      this.age = age;
-    }
-    static [__WEBPACK_IMPORTED_MODULE_0__index__["a" /* Extractor */]](inst) {
-      return [inst.age, inst.name];
-    }
-  }) || _class3);
-  let Animal = (_dec4 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('Cat($2, $1)'), _dec4(_class4 = class Animal {
-    constructor(name, breed) {}
-  }) || _class4);
 
 
-  it('should work with a successful match', function () {
-    const cons = new Cons('hello', 'world');
-
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a, b)`(({ a, b }) => `${a} ${b}`)).should.equal('hello world');
+describe('option', function () {
+  it('should be constructable as Some', function () {
+    new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).should.be.an.instanceof(__WEBPACK_IMPORTED_MODULE_0____["b" /* Option */]);
   });
 
-  it('should throw a MatchError if there is no matching case', function () {
-    const cons = new Cons('hello', 'world');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)()).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'exhaustive');
+  it('should be constructable as None', function () {
+    new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().should.be.an.instanceof(__WEBPACK_IMPORTED_MODULE_0____["b" /* Option */]);
   });
 
-  it('should produce the first matching case if many are valid', function () {
-    const cons = new Cons('hello', 'world');
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Empty`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a, b)`(({ a, b }) => `${a} ${b}`), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a, b)`(() => 'fail')).should.equal('hello world');
+  it('should be compatible with match', function () {
+    Object(__WEBPACK_IMPORTED_MODULE_1__match__["b" /* match */])(new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3))(__WEBPACK_IMPORTED_MODULE_1__match__["c" /* pattern */]`None`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_1__match__["c" /* pattern */]`Some(x)`(({ x }) => x)).should.equal(3);
+
+    Object(__WEBPACK_IMPORTED_MODULE_1__match__["b" /* match */])(new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]())(__WEBPACK_IMPORTED_MODULE_1__match__["c" /* pattern */]`None`(() => 'pass'), __WEBPACK_IMPORTED_MODULE_1__match__["c" /* pattern */]`Some(x)`(() => 'fail')).should.equal('pass');
   });
 
-  it('should use a custom extractor', function () {
-    const person = new Person('Dave', 9);
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(person)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a, b)`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Person(age, name)`(({ age, name }) => `${name} is ${age}`)).should.equal('Dave is 9');
+  it('should be compatible with Monad', function () {
+    new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).should.be.an.instanceof(__WEBPACK_IMPORTED_MODULE_2__monad___default.a);
+    __WEBPACK_IMPORTED_MODULE_0____["b" /* Option */].return(3).should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3));
+    new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).bind(x => __WEBPACK_IMPORTED_MODULE_0____["b" /* Option */].return(x + 1)).should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](4));
+    __WEBPACK_IMPORTED_MODULE_0____["b" /* Option */].fail("Bad").should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]());
   });
 
-  it('should use a custom pattern', function () {
-    const cat = new Animal('Dave', 'tabby');
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cat)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Animal(a, b)`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cat(breed, name)`(({ name, breed }) => `${name} is a ${breed}`)).should.equal('Dave is a tabby');
+  describe('.from', function () {
+    it('should create a None or Some from a nullable value', function () {
+      __WEBPACK_IMPORTED_MODULE_0____["b" /* Option */].from(null).should.be.an.instanceof(__WEBPACK_IMPORTED_MODULE_0____["a" /* None */]);
+      __WEBPACK_IMPORTED_MODULE_0____["b" /* Option */].from(undefined).should.be.an.instanceof(__WEBPACK_IMPORTED_MODULE_0____["a" /* None */]);
+      __WEBPACK_IMPORTED_MODULE_0____["b" /* Option */].from(3).should.be.an.instanceof(__WEBPACK_IMPORTED_MODULE_0____["c" /* Some */]);
+    });
   });
 
-  it('should support nested patterns', function () {
-    const list = new Cons('first', new Cons('second', 'third'));
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(list)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Cons(second, third))`(({ first, second, third }) => `${first} ${second} ${third}`)).should.equal('first second third');
+  describe('#map', function () {
+    it('should transform values', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).map(x => x + 1).should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](4));
+    });
+    it('should do nothing for none', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().map(x => x + 1).should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]());
+    });
   });
 
-  it('should match the correct nested pattern', function () {
-    const list = new Cons('first', new Cons('second', new Empty()));
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(list)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Empty)`(() => 'fail 1'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Cons(second, Cons(third, Empty)))`(() => 'fail 2'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Cons(second, Empty))`(({ first, second }) => `${first} ${second}`), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, rest)`(() => 'fail 3')).should.equal('first second');
+  describe('#flatMap', function () {
+    it('should transform and flatten values', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).flatMap(x => new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](x + 1)).should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](4));
+      new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().flatMap(x => new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]()).should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]());
+    });
+    it('should do nothing for none', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().flatMap(x => new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](x + 1)).should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]());
+      new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().flatMap(x => new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]()).should.deep.equal(new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]());
+    });
+    it('should check that the returned value is actually an option', function () {
+      (() => new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](1).flatMap(x => 4)).should.throw();
+    });
   });
 
-  it('should let * be a non-matching wildcard', function () {
-    const cons = new Cons('hello', 'world');
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(*, second)`(x => x)).should.deep.equal({ second: 'world' });
+  describe('#unwrap', function () {
+    it('should return the contained value', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).unwrap().should.equal(3);
+    });
+    it('should fail when unwrapping a None', function () {
+      (() => new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().unwrap()).should.throw();
+    });
   });
 
-  it('should match JSON values prefixed with = as non-matching literal values', function () {
-    const cons = new Cons(1, 2);
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(1, 2)`(obj => `${obj[1]}, ${obj[2]}`)).should.equal('1, 2');
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(="a", b)`(() => 'fail 1'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(=2, b)`(() => 'fail 2'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(=1, b)`(({ b }) => b)).should.equal(2);
+  describe('#unwrapOr', function () {
+    it('should return the contained value', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).unwrapOr(4).should.equal(3);
+    });
+    it('should return the default value', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().unwrapOr(4).should.equal(4);
+    });
   });
 
-  it('should match JSON objects and arrays deeply', function () {
-    const cons = new Cons({ a: { b: 1 } }, { c: { d: 2 } });
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(={ "a": { "b": 1 } }, b)`(({ b: { c: { d } } }) => d)).should.equal(2);
+  describe('#isNone', function () {
+    it('should be false for a some', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).isNone.should.equal(false);
+    });
+    it('should be true for a none', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().isNone.should.equal(true);
+    });
   });
 
-  it('should throw a MatchError when the JSON after an = is invalid', function () {
-    const cons = new Cons(1, 2);
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(=a, b)`(obj => `${obj[1]}, ${obj[2]}`))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'JSON');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(='a', b)`(obj => `${obj[1]}, ${obj[2]}`))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'JSON');
-  });
-
-  it('should throw a MatchError if there are extra commas', function () {
-    const cons = new Cons(1, 2);
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(1, , 2)`(obj => `${obj[1]}, ${obj[2]}`))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'invalid');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a,,b)`(({ b }) => b))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'invalid');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(,a,b)`(({ b }) => b))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'invalid');
-  });
-
-  it('should not throw a MatchError for trailing commas', function () {
-    const cons = new Cons(1, 2);
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a,b,)`(({ b }) => b)).should.equal(2);
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a,b,,)`(({ b }) => b)).should.equal(2);
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a,b,,,,,,,,,)`(({ b }) => b)).should.equal(2);
-  });
-
-  it('should throw a MatchError if the parentheses do not match in any pattern', function () {
-    const cons = new Cons('first', 'second');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, second)`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Cons second, third)))`(() => 'fail'))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'invalid');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, second)`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Cons(second, third)`(() => 'fail'))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'invalid');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, second`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Cons(second, third))`(() => 'fail'))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'invalid');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons first, second)`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Cons(second, third))`(() => 'fail'))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'invalid');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first)(second)`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(first, Cons(second, third))`(() => 'fail'))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'invalid');
-  });
-
-  it('should throw a match error if the wrong number of elements is being extracted', function () {
-    const cons = new Cons('first', 'second');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a)`(() => 'fail'))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'parameters');
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a, b, c)`(() => 'fail'))).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["b" /* MatchError */], 'parameters');
-  });
-
-  it('should re-throw the error that is thrown by the callback', function () {
-    const cons = new Cons(1, 2);
-    (() => Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(cons)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons(a, b)`(() => {
-      throw new Error('TheError');
-    }))).should.throw(Error, 'TheError');
-  });
-
-  // TODO: this will be much harder
-  it.skip('should support arbitrary pattern shapes', function () {
-    var _dec5, _class5;
-
-    let Cons2 = (_dec5 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('$1 :: $2'), _dec5(_class5 = class Cons2 {
-      constructor(first, rest) {}
-    }) || _class5);
-
-    const list = new Cons2('first', new Cons2('second', Empty));
-    Object(__WEBPACK_IMPORTED_MODULE_0__index__["e" /* match */])(list)(__WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`Cons2(first, rest)`(() => 'fail'), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`first :: second :: Empty`(({ first, second }) => `${first} ${second}`), __WEBPACK_IMPORTED_MODULE_0__index__["f" /* pattern */]`first :: rest`(() => 'fail')).should.equal('first second');
-  });
-
-  // TODO: if the arbitrary pattern shapes are not implemented
-  it.skip('should throw a PatternError if a pattern does not contain exactly one set of matching parentheses', function () {
-    (() => {
-      var _dec6, _class6;
-
-      let T = (_dec6 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1, $2'), _dec6(_class6 = class T {}) || _class6);
-    }).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */], 'invalid');
-    (() => {
-      var _dec7, _class7;
-
-      let T = (_dec7 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A $1, $2)'), _dec7(_class7 = class T {}) || _class7);
-    }).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */], 'invalid');
-    (() => {
-      var _dec8, _class8;
-
-      let T = (_dec8 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1, ($2))'), _dec8(_class8 = class T {}) || _class8);
-    }).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */], 'invalid');
-    (() => {
-      var _dec9, _class9;
-
-      let T = (_dec9 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1, ($2)'), _dec9(_class9 = class T {}) || _class9);
-    }).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */], 'invalid');
-    (() => {
-      var _dec10, _class10;
-
-      let T = (_dec10 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1), $2)'), _dec10(_class10 = class T {}) || _class10);
-    }).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */], 'invalid');
-  });
-  it.skip('should throw a PatternError if a pattern has extra commas', function () {
-    (() => {
-      var _dec11, _class11;
-
-      let T = (_dec11 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1,,$2)'), _dec11(_class11 = class T {}) || _class11);
-    }).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */], 'invalid');
-    (() => {
-      var _dec12, _class12;
-
-      let T = (_dec12 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A(,$1,$2)'), _dec12(_class12 = class T {}) || _class12);
-    }).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */], 'invalid');
-    (() => {
-      var _dec13, _class13;
-
-      let T = (_dec13 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1, , $2)'), _dec13(_class13 = class T {}) || _class13);
-    }).should.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */], 'invalid');
-  });
-  it.skip('should not throw a PatternError for trailing commas', function () {
-    (() => {
-      var _dec14, _class14;
-
-      let T = (_dec14 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1,$2,)'), _dec14(_class14 = class T {}) || _class14);
-    }).should.not.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */]);
-    (() => {
-      var _dec15, _class15;
-
-      let T = (_dec15 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1, $2,,)'), _dec15(_class15 = class T {}) || _class15);
-    }).should.not.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */]);
-    (() => {
-      var _dec16, _class16;
-
-      let T = (_dec16 = Object(__WEBPACK_IMPORTED_MODULE_0__index__["d" /* data */])('A($1, $2,,,,,,,,)'), _dec16(_class16 = class T {}) || _class16);
-    }).should.not.throw(__WEBPACK_IMPORTED_MODULE_0__index__["c" /* PatternError */]);
+  describe('#isSome', function () {
+    it('should be true for a some', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["c" /* Some */](3).isSome.should.equal(true);
+    });
+    it('should be false for a none', function () {
+      new __WEBPACK_IMPORTED_MODULE_0____["a" /* None */]().isSome.should.equal(false);
+    });
   });
 });
 
@@ -8185,11 +8089,115 @@ module.exports = function (chai, util) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MatchError; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return PatternError; });
-/* harmony export (immutable) */ __webpack_exports__["d"] = data;
-/* harmony export (immutable) */ __webpack_exports__["e"] = match;
-/* harmony export (immutable) */ __webpack_exports__["f"] = pattern;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Option; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return None; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Some; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__monad__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__monad___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__monad__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__match__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__compose__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__compose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__compose__);
+/**
+ * Option type for JS.
+ */
+
+
+var _dec, _class, _dec2, _class2;
+
+
+
+
+
+let Option = class Option extends __WEBPACK_IMPORTED_MODULE_0__monad___default.a {
+  static return(x) {
+    return new Some(x);
+  }
+  static fail() {
+    return new None();
+  }
+  bind(f) {
+    return this.flatMap(f);
+  }
+
+  static from(it) {
+    if (it === null || it === undefined) {
+      return new None();
+    } else {
+      return new Some(it);
+    }
+  }
+};
+
+let None = (_dec = Object(__WEBPACK_IMPORTED_MODULE_1__match__["a" /* data */])(), _dec(_class = class None extends Option {
+  static new() {
+    return new None();
+  }
+
+  get isNone() {
+    return true;
+  }
+  get isSome() {
+    return false;
+  }
+  flatMap() {
+    return this;
+  }
+  map() {
+    return this;
+  }
+  unwrap() {
+    throw new TypeError('Cannot unwrap an Optional which holds no value');
+  }
+  unwrapOr(x) {
+    return x;
+  }
+}) || _class);
+
+let Some = (_dec2 = Object(__WEBPACK_IMPORTED_MODULE_1__match__["a" /* data */])(), _dec2(_class2 = class Some extends Option {
+  static new(it) {
+    return new Some(it);
+  }
+  constructor(it) {
+    super();
+    this.value = it;
+  }
+  get isNone() {
+    return false;
+  }
+  get isSome() {
+    return true;
+  }
+
+  flatMap(f) {
+    const result = f(this.value);
+    if (result instanceof Option) {
+      return result;
+    } else {
+      throw new TypeError(`Expected type Option returned from the transformer passed to flatMap, found ${result}`);
+    }
+  }
+  map(f) {
+    return this.flatMap(__WEBPACK_IMPORTED_MODULE_2__compose___default()(Some.new, f));
+  }
+
+  unwrap() {
+    return this.value;
+  }
+  unwrapOr() {
+    return this.value;
+  }
+}) || _class2);
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export MatchError */
+/* unused harmony export PatternError */
+/* harmony export (immutable) */ __webpack_exports__["a"] = data;
+/* harmony export (immutable) */ __webpack_exports__["b"] = match;
+/* harmony export (immutable) */ __webpack_exports__["c"] = pattern;
 /**
  * Pattern matching-like abilities for JS.
  */
@@ -8198,7 +8206,7 @@ module.exports = function (chai, util) {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 const Extractor = Symbol('Extractor');
-/* harmony export (immutable) */ __webpack_exports__["a"] = Extractor;
+/* unused harmony export Extractor */
 
 const Arguments = Symbol('Arguments');
 const Pattern = Symbol('Pattern');
@@ -8427,6 +8435,37 @@ function deepEqual(a, b) {
     }
   }
 }
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
+
+/**
+ * Function composition
+ */
+module.exports = (f, g) => x => f(g(x));
+
+/***/ }),
+/* 45 */
+/***/ (function(module, __webpack_exports__) {
+
+"use strict";
+/**
+ * Generic monad interface, to be implemented by actual monad instances
+ */
+
+module.exports = class Monad {
+  static fail(error) {
+    throw error;
+  }
+
+  static return(f) {
+    throw new Error('Unimplemented');
+  }
+  bind(f) {
+    throw new Error('Unimplemented');
+  }
+};
 
 /***/ })
 /******/ ]);

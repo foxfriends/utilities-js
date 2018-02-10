@@ -1,7 +1,7 @@
 {
-  "name": "match",
+  "name": "option",
   "version": "1.0.0",
-  "description": "Pattern matching-like abilities for JS",
+  "description": "Option type for JS",
   "main": "index.js",
   "scripts": {
     "test": "mocha index.test.js"
